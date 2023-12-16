@@ -212,7 +212,7 @@ def train(
     train_check = 0.0
     delta_train_err = 1.0
     check_train_err = False
-    delta_epoch_check = 10
+    delta_epoch_check = 20
     gen = torch.random.manual_seed(seed_batch)
 
     print("starting training", flush=True)

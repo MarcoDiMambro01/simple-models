@@ -63,7 +63,7 @@ def init(arch, h, act, seed_init, **args):
         in_channels = xtr.shape[1]
         patch_size = 4
         num_patches = in_dim // patch_size**2
-        model = ViT(embed_dim=h, hidden_dim=2*h, num_channels=in_channels, num_heads=1, num_layers=1, num_classes=num_classes, patch_size=patch_size, num_patches=num_patches, dropout=0.0).to(device)
+        model = ViT(embed_dim=h, hidden_dim=2*h, num_channels=in_channels, num_heads=args.get("heads"), num_layers=args.get("L"), num_classes=num_classes, patch_size=patch_size, num_patches=num_patches, dropout=0.0).to(device)
 
     torch.manual_seed(seed_init)
     def init_weights(m):

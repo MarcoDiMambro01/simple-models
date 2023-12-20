@@ -20,8 +20,9 @@ def main():
 
     parser.add_argument("--arch", type=str, required=True)
     parser.add_argument("--act", type=str, default="relu")
-    parser.add_argument("--L", type=int)
+    parser.add_argument("--L", type=int,default=1)
     parser.add_argument("--h", type=int)
+    parser.add_argument("--heads", type=int,default=1)
 
     parser.add_argument("--loss", type=str, default="cross_entropy")
     parser.add_argument("--dynamics", type=str, default="sgd")

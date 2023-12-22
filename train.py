@@ -165,7 +165,7 @@ def execute(yield_time=0.0, **args):
     if args.get("vit")==0:
         att_maps= []
     else: 
-        img = xte[-1]
+        img = xte[-1].unsqueeze(0)
         model.eval()
         pred, att_maps = model(img)
     yield {

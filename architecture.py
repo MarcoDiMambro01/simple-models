@@ -148,7 +148,9 @@ class ViT(nn.Module):
 
        # Layers/Networks
        self.input_layer = nn.Linear(num_channels*(patch_size**2), embed_dim)
-       self.transformer = nn.Sequential(*[AttentionBlock(embed_dim, hidden_dim, num_heads, dropout=dropout) for _ in range(num_layers)])
+       #self.transformer = nn.Sequential(*[AttentionBlock(embed_dim, hidden_dim, num_heads, dropout=dropout) for _ in range(num_layers)])
+       self.transformer_blocks = nn.ModuleList([AttentionBlock(embed_dim, hidden_dim, num_heads, dropout=dropout) for _ in range(num_layers)])
+
        self.mlp_head = nn.Sequential(
            nn.LayerNorm(embed_dim),
            nn.Linear(embed_dim, num_classes)
@@ -173,9 +175,13 @@ class ViT(nn.Module):
     # Apply Transforrmer
         x = self.dropout(x)
         x = x.transpose(0, 1)
-        x = self.transformer(x)
+        #x = self.transformer(x)
+        attention_maps = []
+        for block in self.transformer_blocks:
+            x, attn_weights = block(x)
+            attention_maps.append(attn_weights)
 
     # Perform classification prediction
         cls = x[0]
         out = self.mlp_head(cls)
-        return out
+        return out, attention_maps

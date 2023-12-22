@@ -72,9 +72,10 @@ class AttentionBlock(nn.Module):
 
     def forward(self, x):
         inp_x = self.layer_norm_1(x)
-        x = x + self.attn(inp_x, inp_x, inp_x)[0]
+        attn_output, attn_weights = self.attn(inp_x, inp_x, inp_x)
+        x = x + attn_output
         x = x + self.linear(self.layer_norm_2(x))
-        return x
+        return x, attn_weights
     
 
 def img_to_patch(x, patch_size, flatten_channels = True):

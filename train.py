@@ -158,22 +158,20 @@ def execute(yield_time=0.0, **args):
             yield {
                 'arch': darch,
                 args['dynamics']: dict(dynamics=d),
-                'attention': [],
                 'finished': False,
             }
 
-    # get attention map
-    original=0
-    attention1=0
-    attention2=0
-    if args['get_attention']==1:
-        original=xte[-1]
-        attention1,attention2 = get_attention_map(original,model)
-
+    if args.get("vit")==0:
+        att_maps= []
+    else: 
+        img = xte[-1]
+        model.eval()
+        with torch.no_grad:
+            _,att_maps = model(img)
     yield {
         'arch': darch,
         args['dynamics']: dict(dynamics=d),
-        'attention': [attention1,attention2],
+        'attn_maps': att_maps,
         'finished': True,
     }
 
@@ -200,16 +198,19 @@ def dataset(dataset, seed_trainset, seed_testset, ptr, pte, **args):
 
 def train(
     optimizer, model, xtr, ytr, xte, yte, dt, bs, loss, seed_batch,
-    checkpoint_criterion, stop_criterion,
+    checkpoint_criterion, stop_criterion,vit,
     ckpt_save_parameters=False, ckpt_save_pred=False, **args
 ):
-
+    vit=args.get("vit")
     wall0 = time.perf_counter()
 
     def evaluate(f, x, y):
         f.eval()
         with torch.no_grad():
-            pred = f(x)
+            if vit == 0:
+                pred = f(x)
+            else: 
+                pred,_ = f(x)
             loss_val = (loss(pred, y)).mean()
             err = (pred.argmax(axis=1) != y).sum() / len(y)
         return pred, loss_val, err
@@ -237,7 +238,10 @@ def train(
                 idx = torch.randperm(len(ytr), generator=gen)[:bs]
                 x_batch, y_batch = xtr[idx], ytr[idx]
                 
-                pred_batch = model(x_batch)
+                if vit==0:
+                    pred_batch = model(x_batch)
+                else: 
+                    pred_batch,_ = model(x_batch)               
                 loss_batch = loss(pred_batch, y_batch).mean()
 
                 optimizer.zero_grad()

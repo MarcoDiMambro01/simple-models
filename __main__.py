@@ -24,7 +24,7 @@ def main():
     parser.add_argument("--h", type=int)
     parser.add_argument("--heads", type=int,default=1)
     
-    parser.add_argument("--get_attention", type=int,default=0)
+    parser.add_argument("--vit", type=int,default=0)
 
     parser.add_argument("--loss", type=str, default="cross_entropy")
     parser.add_argument("--dynamics", type=str, default="sgd")

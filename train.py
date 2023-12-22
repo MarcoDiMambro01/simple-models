@@ -10,6 +10,7 @@ import torch.nn.functional as F
 from torch.utils.data import DataLoader
 
 from .architecture import Linear, mlp, deepLinear, randomFeatures, cnn, ViT
+from .transformer import get_attention_map
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -160,10 +161,17 @@ def execute(yield_time=0.0, **args):
                 'finished': False,
             }
 
+    # get attention map
+    original=0
+    attention=0
+    if args['get_attention']==1:
+        original=xte[-1]
+        attention=get_attention_map(original,model)
+
     yield {
         'arch': darch,
         args['dynamics']: dict(dynamics=d),
-        'model': model,
+        'attention': attention,
         'finished': True,
     }
 

@@ -1,6 +1,47 @@
-# import torch
+import torch
 import torch.nn as nn
 # import torch.nn.functional as F
+import numpy as np
+import cv2
+
+#plot attention maps
+def get_attention_map(img, model, get_mask=False):
+    #x = transform(img)
+    #x.size()
+    x=img
+    logits, att_mat = model(x.unsqueeze(0))
+
+    att_mat = torch.stack(att_mat).squeeze(1)
+
+    # Average the attention weights across all heads.
+    att_mat = torch.mean(att_mat, dim=1)
+
+    # To account for residual connections, we add an identity matrix to the
+    # attention matrix and re-normalize the weights.
+    residual_att = torch.eye(att_mat.size(1))
+    aug_att_mat = att_mat + residual_att
+    aug_att_mat = aug_att_mat / aug_att_mat.sum(dim=-1).unsqueeze(-1)
+
+    # Recursively multiply the weight matrices
+    joint_attentions = torch.zeros(aug_att_mat.size())
+    joint_attentions[0] = aug_att_mat[0]
+
+    for n in range(1, aug_att_mat.size(0)):
+        joint_attentions[n] = torch.matmul(aug_att_mat[n], joint_attentions[n-1])
+
+    v = joint_attentions[-1]
+    grid_size = int(np.sqrt(aug_att_mat.size(-1)))
+    mask = v[0, 1:].reshape(grid_size, grid_size).detach().numpy()
+    if get_mask:
+        result = cv2.resize(mask / mask.max(), img.size)
+    else:        
+        mask = cv2.resize(mask / mask.max(), img.size)[..., np.newaxis]
+        result = (mask * img).astype("uint8")
+    
+    return result
+
+
+
 
 
 class AttentionBlock(nn.Module):
@@ -51,3 +92,4 @@ def img_to_patch(x, patch_size, flatten_channels = True):
         if flatten_channels:
             x = x.flatten(2,4)          # [B, H'*W', C*p_H*p_W]
         return x
+    

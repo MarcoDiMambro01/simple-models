@@ -167,7 +167,7 @@ def execute(yield_time=0.0, **args):
     else: 
         img = xte[-1]
         model.eval()
-        _,att_maps = model(img)
+        pred, att_maps = model(img)
     yield {
         'arch': darch,
         args['dynamics']: dict(dynamics=d),

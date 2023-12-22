@@ -158,6 +158,7 @@ def execute(yield_time=0.0, **args):
             yield {
                 'arch': darch,
                 args['dynamics']: dict(dynamics=d),
+                'attn_maps': [],
                 'finished': False,
             }
 
@@ -166,8 +167,7 @@ def execute(yield_time=0.0, **args):
     else: 
         img = xte[-1]
         model.eval()
-        with torch.no_grad:
-            _,att_maps = model(img)
+        _,att_maps = model(img)
     yield {
         'arch': darch,
         args['dynamics']: dict(dynamics=d),

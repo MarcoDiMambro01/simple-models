@@ -158,7 +158,7 @@ def execute(yield_time=0.0, **args):
             yield {
                 'arch': darch,
                 args['dynamics']: dict(dynamics=d),
-                'attention': ,
+                'attention': [],
                 'finished': False,
             }
 

@@ -159,6 +159,7 @@ def execute(yield_time=0.0, **args):
                 'arch': darch,
                 args['dynamics']: dict(dynamics=d),
                 'attn_maps': [],
+                'original': [],
                 'finished': False,
             }
 
@@ -172,6 +173,7 @@ def execute(yield_time=0.0, **args):
         'arch': darch,
         args['dynamics']: dict(dynamics=d),
         'attn_maps': att_maps,
+        'original': img,
         'finished': True,
     }
 

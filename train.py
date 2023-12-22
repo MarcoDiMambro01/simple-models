@@ -152,7 +152,7 @@ def execute(yield_time=0.0, **args):
         if math.log2(step)%1==0.0: return True
 
     for _, d in train(optimizer=optimizer, model=model, xtr=xtr, ytr=ytr, xte=xte, yte=yte, dt=args['dt'], bs=args['bs'], loss=loss, seed_batch=args['seed_batch'], 
-                      checkpoint_criterion= checkpoint_criterion, stop_criterion = stop_criterion,
+                      checkpoint_criterion= checkpoint_criterion, stop_criterion = stop_criterion, vit=args.get("vit")
                       ):
 
             yield {

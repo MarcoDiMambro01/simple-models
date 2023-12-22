@@ -160,13 +160,14 @@ def execute(yield_time=0.0, **args):
                 args['dynamics']: dict(dynamics=d),
                 'attn_maps': [],
                 'original': [],
+                'labels':[],
                 'finished': False,
             }
 
     if args.get("vit")==0:
         att_maps= []
     else: 
-        img = xte[-1].unsqueeze(0)
+        img = xte[-2].unsqueeze(0)
         model.eval()
         pred, att_maps = model(img)
     yield {
@@ -174,6 +175,7 @@ def execute(yield_time=0.0, **args):
         args['dynamics']: dict(dynamics=d),
         'attn_maps': att_maps,
         'original': img,
+        'label': yte[-1],
         'finished': True,
     }
 

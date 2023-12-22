@@ -158,13 +158,14 @@ def execute(yield_time=0.0, **args):
             yield {
                 'arch': darch,
                 args['dynamics']: dict(dynamics=d),
-                'attention': 0,
+                'attention': ,
                 'finished': False,
             }
 
     # get attention map
     original=0
-    attention=0
+    attention1=0
+    attention2=0
     if args['get_attention']==1:
         original=xte[-1]
         attention1,attention2 = get_attention_map(original,model)

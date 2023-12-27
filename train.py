@@ -10,7 +10,6 @@ import torch.nn.functional as F
 from torch.utils.data import DataLoader
 
 from .architecture import Linear, mlp, deepLinear, randomFeatures, cnn, ViT
-from .transformer import get_attention_map
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 

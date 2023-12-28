@@ -160,11 +160,15 @@ def execute(yield_time=0.0, **args):
                 'attn_maps': [],
                 'original': [],
                 'labels':[],
+                'pred':[],
                 'finished': False,
             }
 
     if args.get("vit")==0:
         att_maps= []
+        img=[]
+        label=[]
+        pred=[]
     else: 
         for i in range(1000):
             if yte[i]==3:
@@ -180,6 +184,7 @@ def execute(yield_time=0.0, **args):
         'attn_maps': att_maps,
         'original': img,
         'label': label,
+        'pred': pred,
         'finished': True,
     }
 

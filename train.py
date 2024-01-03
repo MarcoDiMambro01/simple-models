@@ -171,7 +171,7 @@ def execute(yield_time=0.0, **args):
         pred=[]
     else: 
         for i in range(1000):
-            if yte[i]==3:
+            if yte[i]==5:
                 img = xte[i].unsqueeze(0)
                 label = yte[i]
                 break

@@ -61,7 +61,7 @@ def init(arch, h, act, seed_init, **args):
         assert len(xtr.shape) == 4 # Vision Transformer input must have shape (N, C, H, W)
         in_dim = xtr.shape[2]*xtr.shape[3]
         in_channels = xtr.shape[1]
-        patch_size = 4
+        patch_size = args.get("patch_size")
         num_patches = in_dim // patch_size**2
         model = ViT(embed_dim=h, hidden_dim=2*h, num_channels=in_channels, num_heads=args.get("heads"), num_layers=args.get("L"), num_classes=num_classes, patch_size=patch_size, num_patches=num_patches, dropout=0.0).to(device)
 

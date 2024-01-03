@@ -23,6 +23,7 @@ def main():
     parser.add_argument("--L", type=int,default=1)
     parser.add_argument("--h", type=int)
     parser.add_argument("--heads", type=int,default=1)
+    parser.add_argument("--patch_size", type=int,default=4)
     
     parser.add_argument("--vit", type=int,default=0)
     parser.add_argument("--label", type=int,default=3)
